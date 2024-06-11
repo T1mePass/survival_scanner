@@ -1,9 +1,7 @@
-import _thread
 import argparse
 import time
 from typing import Optional, Tuple
 import requests
-from termcolor import cprint
 import urllib3
 import os
 import random
@@ -14,7 +12,19 @@ import ssl
 
 from bs4 import BeautifulSoup
 from enum import Enum
+from termcolor import cprint
 
+# Ignore warning
+urllib3.disable_warnings()
+# Ignore ssl warning info.
+try:
+    _create_unverified_https_context = ssl._create_unverified_context
+except AttributeError:
+    # Legacy Python that doesn't verify HTTPS certificates by default
+    pass
+else:
+    # Handle target environment that doesn't support HTTPS verification
+    ssl._create_default_https_context = _create_unverified_https_context
 
 class Survive_Scanner:
     __ua = [
@@ -180,7 +190,7 @@ class Survive_Scanner:
 
         return False
 
-    # todo !!!!!!!这里https访问有问题
+    
     def survive(self, url):
         # if self.__url == "":
         #     cprint("当前urls为空，请检查是否成功读取文件","red")
